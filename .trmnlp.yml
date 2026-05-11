@@ -1,0 +1,88 @@
+---
+watch:
+  - .trmnlp.yml
+  - src
+
+custom_fields: {}
+
+variables:
+  # Generic fixture data for local development — safe to commit.
+  # Covers all display cases: overdue (high-priority and normal), due today,
+  # due this week, upcoming, no due date, and an item with notes.
+  # Replace due_date values with dates relative to your local "today" when testing.
+  reminders:
+    - title: "High-priority overdue task"
+      notes: ""
+      priority: 1
+      list_name: "Family"
+      due_date: "2026-05-09T04:00:00.000Z"
+      reminder_identifier: "FIXTURE-OVERDUE-HIGH-001"
+    - title: "Overdue task from last week"
+      notes: ""
+      priority: 0
+      list_name: "Family"
+      due_date: "2026-05-07T04:00:00.000Z"
+      reminder_identifier: "FIXTURE-OVERDUE-001"
+    - title: "Old overdue task"
+      notes: ""
+      priority: 0
+      list_name: "Family"
+      due_date: "2026-02-14T05:00:00.000Z"
+      reminder_identifier: "FIXTURE-OVERDUE-002"
+    - title: "Overdue home task"
+      notes: ""
+      priority: 0
+      list_name: "Home Maintenance"
+      due_date: "2026-04-22T04:00:00.000Z"
+      reminder_identifier: "FIXTURE-OVERDUE-003"
+    - title: "Due today task"
+      notes: ""
+      priority: 0
+      list_name: "Home Maintenance"
+      due_date: "2026-05-10T04:00:00.000Z"
+      reminder_identifier: "FIXTURE-TODAY-001"
+    - title: "Second due today task"
+      notes: ""
+      priority: 0
+      list_name: "Family"
+      due_date: "2026-05-10T04:00:00.000Z"
+      reminder_identifier: "FIXTURE-TODAY-002"
+    - title: "Another overdue task"
+      notes: ""
+      priority: 0
+      list_name: "Home Maintenance"
+      due_date: "2026-05-08T04:00:00.000Z"
+      reminder_identifier: "FIXTURE-OVERDUE-004"
+    - title: "Yet another overdue task"
+      notes: ""
+      priority: 0
+      list_name: "Family"
+      due_date: "2026-05-06T04:00:00.000Z"
+      reminder_identifier: "FIXTURE-OVERDUE-005"
+    - title: "Due tomorrow task"
+      notes: ""
+      priority: 0
+      list_name: "Family"
+      due_date: "2026-05-11T04:00:00.000Z"
+      reminder_identifier: "FIXTURE-SOON-001"
+    - title: "Task due later this month with notes"
+      notes: "Call someone to schedule this"
+      priority: 0
+      list_name: "Family"
+      due_date: "2026-11-02T13:00:00.000Z"
+      reminder_identifier: "FIXTURE-UPCOMING-001"
+    - title: "No due date task"
+      notes: ""
+      priority: 0
+      list_name: "Family"
+      reminder_identifier: "FIXTURE-NODATE-001"
+    - title: "Far future task"
+      notes: ""
+      priority: 0
+      list_name: "Family"
+      due_date: "2027-01-01T05:00:00.000Z"
+      reminder_identifier: "FIXTURE-FUTURE-001"
+
+  trmnl:
+    user:
+      utc_offset: -14400

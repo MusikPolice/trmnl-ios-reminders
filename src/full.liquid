@@ -1,0 +1,120 @@
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  .screen {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+
+  .row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 7px 0;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .row__circle {
+    width: 18px;
+    height: 18px;
+    border: 1.5px solid #000;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .row__content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .row__title {
+    font-size: 0.88rem;
+    font-weight: 400;
+    line-height: 1.3;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .row--overdue .row__title {
+    font-weight: 600;
+  }
+
+  .row__meta {
+    font-size: 0.72rem;
+    color: #666;
+    margin-top: 2px;
+    line-height: 1.2;
+  }
+
+  .list-wrap {
+    width: 580px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .empty {
+    font-size: 0.88rem;
+    color: #aaa;
+    font-style: italic;
+    text-align: center;
+    padding-top: 24px;
+  }
+</style>
+
+<div class="screen">
+  <div class="view view--full">
+
+    <div class="title_bar">
+      <p class="title">Today's To-Dos</p>
+    </div>
+
+    <div class="flex flex--col">
+      <div class="list-wrap">
+
+        {% assign today_ts  = trmnl.system.timestamp_utc %}
+        {% assign local_ts  = today_ts | plus: trmnl.user.utc_offset %}
+        {% assign today     = local_ts | date: "%Y-%m-%d" %}
+        {% assign sorted   = reminders | sort: "due_date" %}
+        {% assign row_limit = 8 %}
+        {% assign row_count = 0 %}
+
+        {% for r in sorted %}
+          {% if r.due_date and row_count < row_limit %}
+            {% assign d = r.due_date | date: "%Y-%m-%d" %}
+            {% if d <= today %}
+              {% assign row_count = row_count | plus: 1 %}
+
+              {% comment %}Compute days overdue as (today_ts - due_ts) / 86400{% endcomment %}
+              {% assign due_ts   = r.due_date | date: "%s" | plus: 0 %}
+              {% assign days_ago = today_ts | minus: due_ts | divided_by: 86400 %}
+
+              {% if days_ago == 0 %}
+                {% assign age_label = "Today" %}
+              {% elsif days_ago == 1 %}
+                {% assign age_label = "1 day overdue" %}
+              {% else %}
+                {% assign age_label = days_ago | append: " days overdue" %}
+              {% endif %}
+
+              <div class="row{% if d < today %} row--overdue{% endif %}">
+                <div class="row__circle"></div>
+                <div class="row__content">
+                  <p class="row__title">{% if r.priority == 1 %}! {% endif %}{{ r.title }}</p>
+                  <p class="row__meta">{{ age_label }} · {{ r.list_name }}</p>
+                </div>
+              </div>
+            {% endif %}
+          {% endif %}
+        {% endfor %}
+
+        {% if row_count == 0 %}
+          <p class="empty">All caught up — nothing due today.</p>
+        {% endif %}
+
+      </div>
+    </div>
+
+  </div>
+</div>
