@@ -1,1 +1,55 @@
-quadrant
+<style>
+  /* 400×240 — left-aligned, single-line rows, no meta */
+  .list-wrap { width: 340px; margin-left: 12px; margin-right: 0; align-self: flex-start; }
+
+  .row {
+    padding: 4px 0;
+    align-items: center;
+  }
+
+  .row__circle {
+    margin-top: 0;
+  }
+</style>
+
+<div class="screen">
+  <div class="view view--quadrant">
+
+    <div class="title_bar">
+      <p class="title">Today's To-Dos</p>
+    </div>
+
+    <div class="flex flex--col">
+      <div class="list-wrap">
+
+        {% assign today_ts  = trmnl.system.timestamp_utc %}
+        {% assign local_ts  = today_ts | plus: trmnl.user.utc_offset %}
+        {% assign today     = local_ts | date: "%Y-%m-%d" %}
+        {% assign sorted    = reminders | sort: "due_date" %}
+        {% assign row_limit = 6 %}
+        {% assign row_count = 0 %}
+
+        {% for r in sorted %}
+          {% if r.due_date and row_count < row_limit %}
+            {% assign d = r.due_date | date: "%Y-%m-%d" %}
+            {% if d <= today %}
+              {% assign row_count = row_count | plus: 1 %}
+              <div class="row{% if d < today %} row--overdue{% endif %}">
+                <div class="row__circle"></div>
+                <div class="row__content">
+                  <p class="row__title">{% if r.priority == 1 %}! {% endif %}{{ r.title }}</p>
+                </div>
+              </div>
+            {% endif %}
+          {% endif %}
+        {% endfor %}
+
+        {% if row_count == 0 %}
+          <p class="empty">All caught up.</p>
+        {% endif %}
+
+      </div>
+    </div>
+
+  </div>
+</div>

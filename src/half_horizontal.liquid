@@ -1,1 +1,68 @@
-half_horizontal
+<style>
+  .list-wrap { width: 740px; margin-left: auto; margin-right: auto; }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: repeat(4, auto);
+    grid-auto-flow: column;
+    column-gap: 28px;
+  }
+
+  /* Tighten rows slightly to fit 4 per column in 240px height */
+  .two-col .row { padding: 4px 0; }
+</style>
+
+<div class="screen">
+  <div class="view view--half_horizontal">
+
+    <div class="title_bar">
+      <p class="title">Today's To-Dos</p>
+    </div>
+
+    <div class="flex flex--col">
+      <div class="list-wrap">
+        <div class="two-col">
+
+          {% assign today_ts  = trmnl.system.timestamp_utc %}
+          {% assign local_ts  = today_ts | plus: trmnl.user.utc_offset %}
+          {% assign today     = local_ts | date: "%Y-%m-%d" %}
+          {% assign sorted    = reminders | sort: "due_date" %}
+          {% assign row_limit = 8 %}
+          {% assign row_count = 0 %}
+
+          {% for r in sorted %}
+            {% if r.due_date and row_count < row_limit %}
+              {% assign d = r.due_date | date: "%Y-%m-%d" %}
+              {% if d <= today %}
+                {% assign row_count = row_count | plus: 1 %}
+                {% assign due_ts   = r.due_date | date: "%s" | plus: 0 %}
+                {% assign days_ago = today_ts | minus: due_ts | divided_by: 86400 %}
+                {% if days_ago == 0 %}
+                  {% assign age_label = "Today" %}
+                {% elsif days_ago == 1 %}
+                  {% assign age_label = "1 day overdue" %}
+                {% else %}
+                  {% assign age_label = days_ago | append: " days overdue" %}
+                {% endif %}
+                <div class="row{% if d < today %} row--overdue{% endif %}">
+                  <div class="row__circle"></div>
+                  <div class="row__content">
+                    <p class="row__title">{% if r.priority == 1 %}! {% endif %}{{ r.title }}</p>
+                    <p class="row__meta">{{ age_label }} · {{ r.list_name }}</p>
+                  </div>
+                </div>
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+
+          {% if row_count == 0 %}
+            <p class="empty">All caught up — nothing due today.</p>
+          {% endif %}
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
