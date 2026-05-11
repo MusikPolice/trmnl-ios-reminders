@@ -22,7 +22,8 @@ the Liquid markup that TRMNL renders into a screen image.
 | `src/half_vertical.liquid` | 400×480 layout |
 | `src/quadrant.liquid` | 400×240 layout |
 | `src/shared.liquid` | CSS/markup included before all layout files |
-| `src/settings.yml` | Plugin metadata (strategy: webhook) |
+| `src/settings.yml` | Plugin metadata — **gitignored**, contains plugin ID; updated by `trmnlp push` |
+| `src/settings.example.yml` | Committed template — copy to `settings.yml` and set your plugin ID |
 | `.trmnlp.yml` | Dev server config and fixture data |
 | `bin/serve.ps1` | Docker runner for trmnlp |
 | `resources/trmnl.json` | Sample `{{ trmnl }}` payload (gitignored, personal) |

@@ -36,7 +36,13 @@ Date strings are UTC ISO 8601; for Eastern Time, midnight = `T04:00:00.000Z`.
 This is a private TRMNL plugin using the **webhook** strategy. The iOS Companion app sends
 reminder data directly to TRMNL's webhook endpoint. No hosted server is required.
 
-To deploy markup changes:
+### First-time setup
+
+Copy `src/settings.example.yml` to `src/settings.yml` and set your plugin ID (the number at
+the end of your plugin's URL on `trmnl.com`). This file is gitignored — it contains your
+plugin ID and will be updated by `trmnlp push` with the full server response.
+
+### Pushing markup changes
 
 ```powershell
 # authenticate once (stores credentials in ~/.config/trmnlp)
@@ -52,8 +58,8 @@ docker run --rm -it `
   trmnl/trmnlp push
 ```
 
-Or copy the rendered HTML from `localhost:4567` into the plugin's WYSIWYG editor at
-`trmnl.com/plugins/my`.
+Credentials are stored in `~/.config/trmnlp/config.yml` (outside the repo). Both
+`src/settings.yml` and the credentials file are gitignored.
 
 ## Layouts
 
