@@ -39,11 +39,17 @@ reminder data directly to TRMNL's webhook endpoint. No hosted server is required
 To deploy markup changes:
 
 ```powershell
-# authenticate once
-.\bin\serve.ps1   # then run: trmnlp login
+# authenticate once (stores credentials in ~/.config/trmnlp)
+docker run --rm -it `
+  --volume "${PWD}:/plugin" `
+  --volume "$env:USERPROFILE/.config/trmnlp:/root/.config/trmnlp" `
+  trmnl/trmnlp login
 
-# push markup to TRMNL
-.\bin\serve.ps1   # then run: trmnlp push
+# push markup to your TRMNL plugin
+docker run --rm -it `
+  --volume "${PWD}:/plugin" `
+  --volume "$env:USERPROFILE/.config/trmnlp:/root/.config/trmnlp" `
+  trmnl/trmnlp push
 ```
 
 Or copy the rendered HTML from `localhost:4567` into the plugin's WYSIWYG editor at
@@ -53,10 +59,10 @@ Or copy the rendered HTML from `localhost:4567` into the plugin's WYSIWYG editor
 
 | Layout | Status | Description |
 |---|---|---|
-| Full (800×480) | complete | Up to 8 items |
-| Half Horizontal (800×240) | planned | |
-| Half Vertical (400×480) | planned | |
-| Quadrant (400×240) | planned | |
+| Full (800×480) | complete | Up to 8 items, two-line rows with age label and list name |
+| Half Horizontal (800×240) | complete | 8 items in two columns of 4 via CSS grid |
+| Half Vertical (400×480) | complete | 8 items, age label only (list name omitted to save width) |
+| Quadrant (400×240) | complete | 6 items, title only, compact single-line rows |
 
 ## Data model
 

@@ -57,7 +57,7 @@ users in negative UTC offsets in the evening hours.
 - 800×480 px, 4 shades of gray only (black, dark gray, light gray, white)
 - No color — use weight, size, and shade to convey hierarchy
 - TRMNL framework uses `flex--row` layout by default; use `flex flex--col` for vertical lists
-- Font: Inter via Google Fonts (`<link>` at top of layout file), system sans-serif fallback
+- Font: Inter via Google Fonts — `<link>` tags and base `.screen` font-family are in `shared.liquid`
 
 ## Layout structure
 
@@ -68,7 +68,7 @@ users in negative UTC offsets in the evening hours.
       <p class="title">...</p>
     </div>
     <div class="flex flex--col">
-      <div class="list-wrap">          <!-- centered fixed-width container -->
+      <div class="list-wrap">
         <!-- rows here -->
       </div>
     </div>
@@ -76,10 +76,14 @@ users in negative UTC offsets in the evening hours.
 </div>
 ```
 
+**Important — `flex--col` has `align-items: center`** in the TRMNL framework CSS. For wide
+layouts (Full, Half Horizontal) this centers `.list-wrap` by default, which is what we want.
+For narrow layouts (Half Vertical, Quadrant) where we want left-alignment, override with
+`align-self: flex-start` on `.list-wrap` — margin alone will not work.
+
 ## Row cap per layout
 
-Rows are two-line (title + meta). Approximate maximums:
-- Full (800×480): 8 rows
-- Half Horizontal (800×240): to be determined
-- Half Vertical (400×480): to be determined
-- Quadrant (400×240): to be determined
+- Full (800×480): 8 rows, two-line (title + age · list name)
+- Half Horizontal (800×240): 8 rows across two columns of 4, two-line
+- Half Vertical (400×480): 8 rows, two-line (title + age only, list name omitted)
+- Quadrant (400×240): 6 rows, single-line (title only, no meta)
